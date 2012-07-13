@@ -71,6 +71,7 @@ class CompareFiles:
 		info += str(self.targetCentroid)
 		info += "\n[Target Components] "
 		info += str(self.targetComponents)
+		info += "\n"
 		print(info)
 
 	def process(self, compareDistance, compareWeights, componentSize):
@@ -139,30 +140,22 @@ class CompareFiles:
 		self.targetComponents = len(targetMask.connected_components(componentSize))
 
 		# Return Diff Image
-		return targetSurf
+		return surfDiff
 
 	def drawCentroid(self, surface):
 		"""Draw the centroid on a surface."""
-		pygame.draw.circle(surface, GREEN, self.targetCentroid, 5)
+		center = self.targetCentroid
+		pygame.draw.circle(surface, GREEN, (center[0] + self.minX, center[1] + self.minY), 5)
 
-	def drawRect(self, mode, surface):
-		"""
-		Draws bounding box(s) based on max and min points on a surface.
+	def drawBound(self, surface):
+		"""Draw the bounding box on a surface."""
+		tmpRect = pygame.Rect(self.minX, self.minY, abs(self.minX - self.maxX), abs(self.minY - self.maxY))
+		pygame.draw.rect(surface, BLUE, tmpRect, 3)
 
-		Keyword arguments:
-		mode -- how to draw the bounding boxes
-				0 - no bounding boxes
-				1 - full bounding box
-				2 - full boundomg box + target area
-
-		"""
-		# Note: Rect Colors and Border Sizes are Magic
-		if mode >= 1:
-			tmpRect = pygame.Rect(self.minX, self.minY, abs(self.minX - self.maxX), abs(self.minY - self.maxY))
-			pygame.draw.rect(surface, BLUE, tmpRect, 3)
-		if mode == 2:
-			tmpRect = pygame.Rect(self.minX, self.minY, abs(self.minX - self.maxX), abs(self.inY - self.maxY)*0.3)
-			pygame.draw.rect(surface, RED, tmpRect, 3)
+	def drawTarget(self, surface):
+		"""Draws the target box on a surface."""
+		tmpRect = pygame.Rect(self.minX, self.minY, abs(self.minX - self.maxX), abs(self.minY - self.maxY)*0.3)
+		pygame.draw.rect(surface, RED, tmpRect, 3)
 		
 # Main
 if __name__ == "__main__":

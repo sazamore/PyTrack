@@ -10,26 +10,61 @@ from ImageFile import *
 from CompareFiles import *
 from Helper import *
 
-# Start the Class
-runIt = Main()
-
 # Open the Files
-file1 = open("absdiff.txt", mode="w", encoding="utf-8")
-file2 = open("absy.txt", mode="w", encoding="utf-8")
+# file1 = open("absdiff.txt", mode="w", encoding="utf-8")
+# file2 = open("absy.txt", mode="w", encoding="utf-8")
 
-# Loop
-for i in range(1, 1450): # Max 1450
-	# Read In Files
-	jpg1 = 'SampleData/moth' + str(i).zfill(4) + '.jpg'
-	jpg2 = 'SampleData/moth' + str(i+1).zfill(4) + '.jpg'
-	# Print Files
-	img1 = ImageFile(jpg1)
-	img2 = ImageFile(jpg2)
-	print("Comparing '" + jpg1 + "' to '" + jpg2 + "'")
-	runIt.compareFile(img1, img2, 0.5)
-	# file1.write(str(runIt.conflicts) + "\n")
-	# file2.write(str(runIt.absy) + "\n")
+# Basic PyGame Variables
+screen = pygame.display.set_mode((640, 480)) # Magic Window Size
+clock = pygame.time.Clock()
+running = True
+
+# File Var
+currFile = 1
+prossFile = 0
+# File Function
+def genFile(i):
+	return 'SampleData/moth' + str(i).zfill(4) + '.jpg'
+
+# Main Game Loop
+while running: #1450
+	# Fill Display
+	screen.fill(BLACK)
+
+	# Load Compare
+	if currFile != prossFile:
+		compare = CompareFiles(genFile(currFile), genFile(currFile+1))
+		tmpImage = compare.process( 0.3, (0.5, 0.5, 0.5), 300 )
+		compare.drawCentroid(tmpImage)
+		compare.drawBound(tmpImage)
+		compare.drawTarget(tmpImage)
+		compare.printInfo()
+		if currFile > prossFile:
+			prossFile += 1
+		else:
+			prossFile -= 1
+
+	# Draw Image
+	screen.blit(tmpImage, dest=(0,0))
+
+	# Look For Exit
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			running = False
+
+	# Get Keys
+	key = pygame.key.get_pressed()
+	# Change Current File
+	if key[pygame.K_RIGHT]:
+		currFile += 1
+	elif key[pygame.K_LEFT] and currFile > 1:
+		currFile -= 1
+	
+	# Refresh Display
+	pygame.display.flip()
+	# Limit Frames
+	clock.tick(30)
 	
 # Close the Files
-file1.close()
-file2.close()
+# file1.close()
+# file2.close()
