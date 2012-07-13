@@ -110,7 +110,7 @@ class CompareFiles:
 		for aRect in rects:
 			# ----------------------------------------------
 			# Track all object on the screen
-			# pygame.draw.rect(tmpSurface, (255,0,0), aRect) 
+			# pygame.draw.rect(surfDiff, (255,0,0), aRect) 
 			# ----------------------------------------------
 			self.findBounds(aRect.left, aRect.top)
 			self.findBounds(aRect.right, aRect.bottom)
