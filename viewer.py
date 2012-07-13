@@ -6,20 +6,17 @@
 # License: GPLv3 <http://gplv3.fsf.org/>
 
 # Imports
-from ImageFile import *
-from CompareFiles import *
-from Helper import *
+from Classes.ImageFile import *
+from Classes.CompareFiles import *
+from Classes.Helper import *
 
-# Open the Files
-# file1 = open("absdiff.txt", mode="w", encoding="utf-8")
-# file2 = open("absy.txt", mode="w", encoding="utf-8")
 
 # Basic PyGame Variables
 screen = pygame.display.set_mode((640, 480)) # Magic Window Size
 clock = pygame.time.Clock()
 running = True
 
-# File Var
+# File Vars
 currFile = 1
 prossFile = 0
 # File Function
@@ -55,7 +52,7 @@ while running: #1450
 	# Get Keys
 	key = pygame.key.get_pressed()
 	# Change Current File
-	if key[pygame.K_RIGHT]:
+	if key[pygame.K_RIGHT] and currFile < 1450:
 		currFile += 1
 	elif key[pygame.K_LEFT] and currFile > 1:
 		currFile -= 1
@@ -64,7 +61,3 @@ while running: #1450
 	pygame.display.flip()
 	# Limit Frames
 	clock.tick(30)
-	
-# Close the Files
-# file1.close()
-# file2.close()

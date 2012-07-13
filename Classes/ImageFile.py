@@ -9,7 +9,7 @@
 import sys
 import pygame
 import numpy
-from Helper import *
+from Classes.Helper import *
 
 class ImageFile:
 	"""An Image File Class."""

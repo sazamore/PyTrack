@@ -6,11 +6,8 @@
 # License: GPLv3 <http://gplv3.fsf.org/>
 
 # Imports
-from ImageFile import *
-from Helper import *
-
-# Clarifications:
-# Ta
+from Classes.ImageFile import *
+from Classes.Helper import *
 
 class CompareFiles:
 	"""For Comparing Two ImageFiles."""
