@@ -9,13 +9,7 @@
 import sys
 import pygame
 import numpy
-
-# Colors
-WHITE = (255,255,255)
-BLACK = (0,0,0)
-RED   = (255,0,0)
-GREEN = (0,255,0)
-BLUE  = (0,0,255)
+from Helper import *
 
 class ImageFile:
 	"""An Image File Class."""
@@ -24,48 +18,33 @@ class ImageFile:
 		self.filePath = filePath
 
 		# Read In The File and Print
-		self.imgFile = pygame.image.load(filePath)
+		self.imgFile = pygame.image.load(filePath) # TODO: Error Check
 		print("Loaded '" + filePath + "'...") # Debug
 
 		# Get Image Size
 		self.width = self.imgFile.get_width()
 		self.height = self.imgFile.get_height()
-		
-		# Create Surface Array(self.pixels) and 
-		# Pixel Area(self.pixarr) from Image Surface
-		self.pixels = pygame.surfarray.array2d(self.imgFile)
-		self.pixarr = pygame.PixelArray(self.imgFile)
-			
+
+	# Accessors
+	def getFilePath(self):
+		"""Returns the filepath."""
+		return self.filePath
 	def getArea(self):
 		"""Returns the pixel area of the image."""
 		return self.width * self.height
+	def getSurfArr(self):
+		"""Returns a 2D array of pixels."""
+		return pygame.surfarray.array2d(self.imgFile)
+	def getPixelArr(self):
+		"""Returns a pixel array."""
+		return pygame.PixelArray(self.imgFile)
 
+	# Info
 	def printInfo(self):
 		"""Prints basic information for the image."""
 		print("Image Width: " + str(self.width) + "px")
 		print("Image Height: " + str(self.height) + "px")
 		print("Image Area: " + str(self.getArea()) + "px")
-
-	def drawRect(self, mode, minX, maxX, minY, maxY, screen):
-		"""
-		Draws bounding box(s) based on max and min points.
-
-		Keyword arguments:
-		mode -- how to draw the bounding boxes
-				0 - no bounding boxes
-				1 - full bounding box
-				2 - full boundomg box + target area
-		minX, maxX, minY, maxY -- points used to draw bounding boxes
-		screen -- surface to draw on
-
-		"""
-		# Note: Rect Colors and Border Sizes are Magic
-		if mode >= 1:
-			tmpRect = pygame.Rect(minX, minY, abs(minX - maxX), abs(minY - maxY))
-			pygame.draw.rect(screen, BLUE, tmpRect, 3)
-		if mode == 2:
-			tmpRect = pygame.Rect(minX, minY, abs(minX - maxX), abs(minY - maxY)*0.3)
-			pygame.draw.rect(screen, RED, tmpRect, 3)
 		
 	def display(self, mode = 0, minX = 0, maxX = 0, minY = 0, maxY = 0):
 		"""
@@ -73,6 +52,7 @@ class ImageFile:
 
 		Keyword arguments:
 		See drawRect's DocString
+
 		"""
 		# Basic PyGame Variables
 		screen = pygame.display.set_mode((self.width, self.height))
@@ -84,7 +64,7 @@ class ImageFile:
 			# Display Image
 			screen.fill(WHITE)
 			#screen.blit(self.imgFile, dest=(0,0))
-			pygame.surfarray.blit_array(screen, self.pixels)
+			pygame.surfarray.blit_array(screen, self.getSurfArr())
 
 			# Draw Rect
 			if mode != 0:
@@ -108,8 +88,8 @@ class ImageFile:
 		
 # Main
 if __name__ == "__main__":
-	# Load Sample JPG
-	img = ImageFile('JPGs/moth0001.jpg')
+	# Load Sample Image
+	img = ImageFile('SampleData/moth0001.jpg')
 	# Display Image Info
 	img.printInfo()
 	# Display Image
