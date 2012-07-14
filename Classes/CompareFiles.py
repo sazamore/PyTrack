@@ -87,7 +87,7 @@ class CompareFiles:
 		http://www.pygame.org/docs/ref/mask.html#Mask.connected_components
 
 		"""
-		print("Comparing '" +  self.imgLeft.getFilePath() + "' to '" +  self.imgRight.getFilePath() + "'") # Debug
+		#print("Comparing '" +  self.imgLeft.getFilePath() + "' to '" +  self.imgRight.getFilePath() + "'") # Debug
 
 		# Grab Pixel Array's of Both Images
 		left = self.imgLeft.getPixelArr()
@@ -104,6 +104,15 @@ class CompareFiles:
 		# Get Total Conflicts as Percent
 		self.totalConflicts = round((mask.count() / self.imgLeft.getArea()) * 100, 5)
 
+		# Process Bound amd Target
+		self.processBound(mask)
+		self.processTarget(surfDiff, componentSize)
+
+		# Return Diff Image
+		return surfDiff
+
+	def processBound(self, mask):
+		"""Find the Bounding Box."""
 		# Get Bounding Rects
 		rects = mask.get_bounding_rects()
 		# Find Bounding Box through the Limits of the Bounding Rects
@@ -118,9 +127,11 @@ class CompareFiles:
 		# Get Bounding Box Height
 		self.boundHeight = abs(self.minY - self.maxY)
 
+	def processTarget(self, surfDiff, componentSize):
+		"""Find the Target."""
 		# Get Top 1/3 Portion of the Bounding Box as our Target Area
 		targetWidth = abs(self.minX - self.maxX)
-		targetHeight = self.boundHeight*0.3
+		targetHeight = abs(self.minY - self.maxY)*0.3
 		targetRect = pygame.Rect(self.minX, self.minY, targetWidth, targetHeight)
 		targetSurf = surfDiff.subsurface(targetRect)
 
@@ -136,9 +147,6 @@ class CompareFiles:
 		# Get Connected Components within componentSize Tolerance 
 		self.targetComponents = len(targetMask.connected_components(componentSize))
 
-		# Return Diff Image
-		return surfDiff
-
 	def drawCentroid(self, surface):
 		"""Draw the centroid on a surface."""
 		center = self.targetCentroid
@@ -153,12 +161,3 @@ class CompareFiles:
 		"""Draws the target box on a surface."""
 		tmpRect = pygame.Rect(self.minX, self.minY, abs(self.minX - self.maxX), abs(self.minY - self.maxY)*0.3)
 		pygame.draw.rect(surface, RED, tmpRect, 3)
-		
-# Main
-if __name__ == "__main__":
-	# Load Sample Images
-	compare = CompareFiles('SampleData/moth0001.jpg', 'SampleData/moth0002.jpg')
-	# Compare Images
-	compare.process( 0.3, (0.5, 0.5, 0.5), 300)
-	# Display comparison Info
-	compare.printInfo()

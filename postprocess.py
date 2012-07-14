@@ -10,10 +10,33 @@ from Classes.ImageFile import *
 from Classes.CompareFiles import *
 from Classes.Helper import *
 
-# Open the Files
-# file1 = open("absdiff.txt", mode="w", encoding="utf-8")
-# file2 = open("absy.txt", mode="w", encoding="utf-8")
+# Benchmark 
+import datetime
 
-# Close the Files
-# file1.close()
-# file2.close()
+# Images to Process
+start = 1
+end = 500
+
+# Object Array
+queue = []
+
+startTime = datetime.datetime.now() # Benchmark
+# Load Images into Memory 
+print("Loading " + str(abs(end-start)) + " Images into Memory...") # Debug
+for i in range(start, end):
+	queue.append( CompareFiles(genFile(i), genFile(i+1)) )
+print("Loaded Images into Memory...")   #Debug
+endTime = datetime.datetime.now() - startTime # Benchmark
+print("Loaded in " + str(endTime.seconds) + " seconds.") # Benchmark
+print("Rate is " + str(abs(end-start)/endTime.seconds) + " objects/second.\n") # Benchmark
+
+# Process Images in Queue
+startTime = datetime.datetime.now() # Benchmark
+print("Processing...")
+for obj in queue:
+	obj.process( 0.3, (0.5, 0.5, 0.5), 300 )
+	queue.remove(obj)
+print("Processing Done!")
+endTime = datetime.datetime.now() - startTime # Benchmark
+print("Loaded in " + str(endTime.seconds) + " seconds.") # Benchmark
+print("Rate is " + str(abs(end-start)/endTime.seconds) + " objects/second.") # Benchmark

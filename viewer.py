@@ -9,7 +9,7 @@
 from Classes.ImageFile import *
 from Classes.CompareFiles import *
 from Classes.Helper import *
-
+ 
 # Basic PyGame Variables
 screen = pygame.display.set_mode((640, 480)) # Magic Window Size
 clock = pygame.time.Clock()
@@ -18,9 +18,6 @@ running = True
 # File Vars
 currFile = 1
 prossFile = 0
-# File Function
-def genFile(i):
-	return 'SampleData/moth' + str(i).zfill(4) + '.jpg'
 
 # Main Game Loop
 while running: #1450
