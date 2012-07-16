@@ -6,7 +6,6 @@
 # License: GPLv3 <http://gplv3.fsf.org/>
 
 # Imports
-from Classes.ImageFile import *
 from Classes.CompareFiles import *
 from Classes.Helper import *
  

@@ -6,37 +6,76 @@
 # License: GPLv3 <http://gplv3.fsf.org/>
 
 # Imports
-from Classes.ImageFile import *
+import datetime
 from Classes.CompareFiles import *
 from Classes.Helper import *
 
-# Benchmark 
-import datetime
+# Benchmark Class
+class Benchmark:
+	"""Allows for timing of load and process events."""
+	def __init__(self, debug = False):
+		"""
+		Initializes a Benchmark Object.
 
-# Images to Process
-start = 1
-end = 500
+		Data members:
+		startTime -- Datetime object at start of benchmark.
+		num -- Stores amount of objects loaded/processed so we can get a rate 
+		debug -- Used to display or suppress the ouput
+		"""
+		self.debug = debug
+		self.reset()
+	def start(self, prefix, num):
+		"""Starts the timer."""
+		self.startTime = datetime.datetime.now()
+		self.num = num
+		if self.debug:
+			print(prefix + " " + str(num) + " Images...")
+	def end(self):
+		"""Ends the timer."""
+		# Returns Datetime Timedelta
+		result =  datetime.datetime.now() - self.startTime
+		rate = round(self.num / result.seconds, 3)
+		if self.debug:
+			print("Done in " + str(result.seconds) + " seconds. (" + str(rate) + " objects/sec)")
+		self.reset()
+	def reset(self):
+		"""Resets the timer."""
+		self.startTime = None
+		self.num = 0
 
-# Object Array
-queue = []
+# PostProcess Class
+class PostProcess:
+	"""Used to process a batch of images."""
+	def __init__(self, startFrame, endFrame):
+		# Frame Vars
+		self.startFrame = startFrame
+		self.endFrame = endFrame
+		self.totalFrames = abs(endFrame - startFrame)
+		# Queue Vars
+		self.queue = []
+	def load(self):
+		pass
 
-startTime = datetime.datetime.now() # Benchmark
-# Load Images into Memory 
-print("Loading " + str(abs(end-start)) + " Images into Memory...") # Debug
-for i in range(start, end):
-	queue.append( CompareFiles(genFile(i), genFile(i+1)) )
-print("Loaded Images into Memory...")   #Debug
-endTime = datetime.datetime.now() - startTime # Benchmark
-print("Loaded in " + str(endTime.seconds) + " seconds.") # Benchmark
-print("Rate is " + str(abs(end-start)/endTime.seconds) + " objects/second.\n") # Benchmark
 
-# Process Images in Queue
-startTime = datetime.datetime.now() # Benchmark
-print("Processing...")
-for obj in queue:
-	obj.process( 0.3, (0.5, 0.5, 0.5), 300 )
-	queue.remove(obj)
-print("Processing Done!")
-endTime = datetime.datetime.now() - startTime # Benchmark
-print("Loaded in " + str(endTime.seconds) + " seconds.") # Benchmark
-print("Rate is " + str(abs(end-start)/endTime.seconds) + " objects/second.") # Benchmark
+# Main
+if __name__ == "__main__":
+	# Images to Process
+	start = 1
+	end = 500
+	# Object Array
+	queue = []
+	# Benchmark Object
+	timeIt = Benchmark(True)
+
+	timeIt.start("Loading", abs(end-start))
+	# Load Images into Memory 
+	for i in range(start, end):
+		queue.append( CompareFiles(genFile(i), genFile(i+1)) )
+	timeIt.end()
+
+	# Process Images in Queue
+	timeIt.start("Processing", abs(end-start))
+	for obj in queue:
+		obj.process( 0.3, (0.5, 0.5, 0.5), 300 )
+		queue.remove(obj)
+	timeIt.end()
