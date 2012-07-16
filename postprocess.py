@@ -44,6 +44,7 @@ class Benchmark:
 		self.num = 0
 
 # PostProcess Class
+# This would work really nice with threading.
 class PostProcess:
 	"""Used to process a batch of images."""
 	def __init__(self, startFrame, endFrame):
@@ -51,31 +52,29 @@ class PostProcess:
 		self.startFrame = startFrame
 		self.endFrame = endFrame
 		self.totalFrames = abs(endFrame - startFrame)
-		# Queue Vars
+		# Queue Var
 		self.queue = []
-	def load(self):
-		pass
+		# Benchmark Object
+		self.bench = Benchmark(True)
+	def load(self, start, end):
+		self.bench.start("Loading", self.totalFrames)
+		for i in range(start, end):
+			self.queue.append( CompareFiles(genFile(i), genFile(i+1)) )
+		self.bench.end()
+	def process(self):
+		self.bench.start("Processing", self.totalFrames)
+		for obj in self.queue:
+			obj.process( 0.3, (0.5, 0.5, 0.5), 300 )
+			# Grab Obj's Internal Data Here
+			self.queue.remove(obj)
+		self.bench.end()
+	def run(self):
+		self.load(self.startFrame, self.endFrame)
+		self.process()
+
 
 
 # Main
 if __name__ == "__main__":
-	# Images to Process
-	start = 1
-	end = 500
-	# Object Array
-	queue = []
-	# Benchmark Object
-	timeIt = Benchmark(True)
-
-	timeIt.start("Loading", abs(end-start))
-	# Load Images into Memory 
-	for i in range(start, end):
-		queue.append( CompareFiles(genFile(i), genFile(i+1)) )
-	timeIt.end()
-
-	# Process Images in Queue
-	timeIt.start("Processing", abs(end-start))
-	for obj in queue:
-		obj.process( 0.3, (0.5, 0.5, 0.5), 300 )
-		queue.remove(obj)
-	timeIt.end()
+	process = PostProcess(1, 500)
+	process.run() 
