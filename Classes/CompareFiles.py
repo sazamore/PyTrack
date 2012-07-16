@@ -37,6 +37,7 @@ class CompareFiles:
 		self.maxY = -1000
 
 		# Info
+		self.boundCentroid = (0,0)
 		self.totalConflicts = 0
 		self.targetConflicts = 0
 		self.targetCentroid = (0,0)
@@ -60,7 +61,8 @@ class CompareFiles:
 		info += "Min X: " + str(self.minX) + ", "
 		info += "Max X: " + str(self.maxX) + ", "
 		info += "Min Y: " + str(self.minY) + ", "
-		info += "Max Y: " + str(self.maxY)
+		info += "Max Y: " + str(self.maxY) + ", "
+		info += "Centroid: " + str(self.boundCentroid)
 		info += "\n[Conflicts] "
 		info += "Total: " + str(self.totalConflicts) + "%, "
 		info += "Target: " + str(self.targetConflicts) + "%"
@@ -127,6 +129,10 @@ class CompareFiles:
 		# Get Bounding Box Height
 		self.boundHeight = abs(self.minY - self.maxY)
 
+		# Get Centroid 
+		tmpRect = pygame.Rect(self.minX, self.minY, abs(self.minX - self.maxX), abs(self.minY - self.maxY))
+		self.boundCentroid = tmpRect.center
+
 	def processTarget(self, surfDiff, componentSize):
 		"""Find the Target."""
 		# Get Top 1/3 Portion of the Bounding Box as our Target Area
@@ -147,10 +153,15 @@ class CompareFiles:
 		# Get Connected Components within componentSize Tolerance 
 		self.targetComponents = len(targetMask.connected_components(componentSize))
 
-	def drawCentroid(self, surface):
-		"""Draw the centroid on a surface."""
+	def drawTargetCentroid(self, surface):
+		"""Draw the target centroid on a surface."""
 		center = self.targetCentroid
 		pygame.draw.circle(surface, GREEN, (center[0] + self.minX, center[1] + self.minY), 5)
+
+	def drawBoundCentroid(self, surface):
+		"""Draw the bound centroid on a surface."""
+		center = self.boundCentroid
+		pygame.draw.circle(surface, GREEN, (center[0], center[1]), 5)
 
 	def drawBound(self, surface):
 		"""Draw the bounding box on a surface."""

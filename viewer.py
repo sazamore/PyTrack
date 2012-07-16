@@ -30,7 +30,8 @@ while running: #1450
 		# Compare with Thresholds
 		tmpImage = compare.process( 0.3, (0.5, 0.5, 0.5), 300 )
 		# Draw Annotations
-		compare.drawCentroid(tmpImage)
+		compare.drawTargetCentroid(tmpImage)
+		compare.drawBoundCentroid(tmpImage)
 		compare.drawBound(tmpImage)
 		compare.drawTarget(tmpImage)
 		# Print Info
