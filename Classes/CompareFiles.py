@@ -37,7 +37,7 @@ class CompareFiles:
 		self.maxY = -1000
 
 		# Info
-		self.boundCentroid = (0,0)
+		self.boundCenter = (0,0)
 		self.totalConflicts = 0
 		self.targetConflicts = 0
 		self.targetCentroid = (0,0)
@@ -62,7 +62,7 @@ class CompareFiles:
 		info += "Max X: " + str(self.maxX) + ", "
 		info += "Min Y: " + str(self.minY) + ", "
 		info += "Max Y: " + str(self.maxY) + ", "
-		info += "Centroid: " + str(self.boundCentroid)
+		info += "\n[Bound Center] " + str(self.boundCenter)
 		info += "\n[Conflicts] "
 		info += "Total: " + str(self.totalConflicts) + "%, "
 		info += "Target: " + str(self.targetConflicts) + "%"
@@ -131,7 +131,7 @@ class CompareFiles:
 
 		# Get Centroid 
 		tmpRect = pygame.Rect(self.minX, self.minY, abs(self.minX - self.maxX), abs(self.minY - self.maxY))
-		self.boundCentroid = tmpRect.center
+		self.boundCenter = tmpRect.center
 
 	def processTarget(self, surfDiff, componentSize):
 		"""Find the Target."""
@@ -147,8 +147,9 @@ class CompareFiles:
 		# Get Target Conflicts as Percent
 		self.targetConflicts = round((targetMask.count()/(targetWidth*targetHeight)) * 100, 5)
 
-		# Get Target Centroid
+		# Get Target Centroid and Offset Correctly
 		self.targetCentroid = targetMask.centroid()
+		self.targetCentroid = (self.targetCentroid[0] + self.minX, self.targetCentroid[1] + self.minY)
 
 		# Get Connected Components within componentSize Tolerance 
 		self.targetComponents = len(targetMask.connected_components(componentSize))
@@ -156,11 +157,11 @@ class CompareFiles:
 	def drawTargetCentroid(self, surface):
 		"""Draw the target centroid on a surface."""
 		center = self.targetCentroid
-		pygame.draw.circle(surface, GREEN, (center[0] + self.minX, center[1] + self.minY), 5)
+		pygame.draw.circle(surface, GREEN, (center[0], center[1]), 5)
 
-	def drawBoundCentroid(self, surface):
+	def drawBoundCenter(self, surface):
 		"""Draw the bound centroid on a surface."""
-		center = self.boundCentroid
+		center = self.boundCenter
 		pygame.draw.circle(surface, GREEN, (center[0], center[1]), 5)
 
 	def drawBound(self, surface):

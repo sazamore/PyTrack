@@ -8,6 +8,8 @@
 # Imports
 from Classes.CompareFiles import *
 from Classes.Helper import *
+from Classes.Behavior import AbTrack
+from Classes.Behavior import CentroidTrack
  
 # Basic PyGame Variables
 screen = pygame.display.set_mode((640, 480)) # Magic Window Size
@@ -17,6 +19,10 @@ running = True
 # File Vars
 currFile = 1
 prossFile = 0
+
+# Trackers
+track = AbTrack(15)
+track2 = CentroidTrack(40)
 
 # Main Game Loop
 while running: #1450
@@ -29,13 +35,19 @@ while running: #1450
 		compare = CompareFiles(genFile(currFile), genFile(currFile+1))
 		# Compare with Thresholds
 		tmpImage = compare.process( 0.3, (0.5, 0.5, 0.5), 300 )
+		# ! Get Internal Data !
+		track.compare( compare.boundCenter, compare.targetCentroid )
+		track2.add( compare.targetCentroid )
 		# Draw Annotations
 		compare.drawTargetCentroid(tmpImage)
-		compare.drawBoundCentroid(tmpImage)
+		compare.drawBoundCenter(tmpImage)
 		compare.drawBound(tmpImage)
 		compare.drawTarget(tmpImage)
 		# Print Info
+		print("----------------------------------------------------------------")
 		compare.printInfo()
+		print("[Abdomen Direction] "  + track.getDir())
+		track2.printInfo()
 		# Increment in the Correct Direction
 		if currFile > prossFile:
 			prossFile += 1
