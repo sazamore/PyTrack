@@ -12,7 +12,6 @@ Info
 Folders and Files
 -------
 * Classes - Contains all the classes for the project, as well as a helper module.
-* SampleData - Contains sample image data for training tracking algorithm.
 * viewer.py - Used to display annotated results. Navigate with left and right arrow keys.
 * postprocess.py - Used to process image data, and saving results rather than displaying them.
-* realtime.py - Using ROS as a backend it will process realtime streams as fast as it can.  (Unfinished)
+* realtime.py - Using ROS as a backend it will process realtime streams as fast as it can. 
