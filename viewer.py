@@ -6,7 +6,7 @@
 # License: GPLv3 <http://gplv3.fsf.org/>
 
 # Imports
-from Classes.CompareFiles import *
+from Classes.CompareImages import *
 from Classes.Helper import *
 from Classes.Behavior import AbTrack
 from Classes.Behavior import CentroidTrack

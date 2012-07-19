@@ -6,7 +6,8 @@
 # License: GPLv3 <http://gplv3.fsf.org/>
 
 # PyTrack Imports
-from Classes.Images import *
+from Classes.Images import ImageBuffer
+from Classes.CompareImages import *
 from Classes.CompareFiles import *
 
 # Ros Imports

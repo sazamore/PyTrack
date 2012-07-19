@@ -18,7 +18,7 @@ BLUE  = (0,0,255)
 # Helpful Functions
 def genFile(i):
 	"""Return a usable image path."""
-	return 'SampleData/moth' + str(i).zfill(4) + '.jpg'
+	return 'SampleMoth/moth' + str(i).zfill(4) + '.jpg'
 
 def fileExists(path):
 	"""Simply checks if a file exists. Prints an error if not."""

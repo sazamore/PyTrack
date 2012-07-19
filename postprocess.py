@@ -7,7 +7,7 @@
 
 # Imports
 import datetime
-from Classes.CompareFiles import *
+from Classes.CompareImages import *
 from Classes.Helper import *
 
 # Benchmark Class
