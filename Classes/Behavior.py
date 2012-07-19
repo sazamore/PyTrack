@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # Filename: Behavior.py
 # Project Github: http://github.com/super3/PyTrack
 # Author: Shawn Wilkinson <me@super3.org>

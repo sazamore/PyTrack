@@ -5,9 +5,3 @@ __pycache__
 # Ignore Outfiles
 Output/
 *.txt
-
-# Extra Sample Data
-SampleData2/
-SampleData3/
-SampleData4/
-SampleData5/

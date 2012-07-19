@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # Filename: postprocess.py
 # Project Github: http://github.com/super3/PyTrack
 # Author: Shawn Wilkinson <me@super3.org>
@@ -71,7 +71,9 @@ class PostProcess:
 		if self.benchmark:
 			self.bench.start("Loading", self.totalFrames)
 		for i in range(self.startFrame, self.endFrame):
-			self.queue.append( CompareFiles(genFile(i), genFile(i+1)) )
+			img1 = ImageFile(genFile(i))
+			img2 = ImageFile(genFile(i+1))
+			self.queue.append( CompareFiles(img1,img2) )
 		if self.benchmark:
 			self.bench.end()
 	def process(self):

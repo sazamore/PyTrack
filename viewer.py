@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # Filename: viewer.py
 # Project Github: http://github.com/super3/PyTrack
 # Author: Shawn Wilkinson <me@super3.org>
@@ -32,7 +32,9 @@ while running: #1450
 	# If Current File is not the Processed File Then Update
 	if currFile != prossFile:
 		# Load Files
-		compare = CompareFiles(genFile(currFile), genFile(currFile+1))
+		img1 = ImageFile(genFile(currFile))
+		img2 = ImageFile(genFile(currFile+1))
+		compare = CompareFiles(img1,img2)
 		# Compare with Thresholds
 		tmpImage = compare.process( 0.3, (0.5, 0.5, 0.5), 300 )
 		# ! Get Internal Data !

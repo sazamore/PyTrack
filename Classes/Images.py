@@ -41,16 +41,3 @@ class ImageFile:
 		print("Image Width: " + str(self.width) + "px")
 		print("Image Height: " + str(self.height) + "px")
 		print("Image Area: " + str(self.getArea()) + "px")
-
-class ImageBuffer(ImageFile):
-	"""Same as Image File Class, but Accepts Buffer."""
-	def __init__(self, string, size, format):
-		# Placeholder File Path
-		self.filePath = "From Buffer"
-
-		# Read In Image from Buffer
-		self.imgFile = pygame.image.frombuffer(filePath, size, format)
-
-		# Get Image Size
-		self.width = self.imgFile.get_width()
-		self.height = self.imgFile.get_height()
